@@ -1,0 +1,25 @@
+[[language]]
+name = "typescript"
+formatter = { command = "bunx", args = ["prettier", "--parser", "typescript"] }
+
+[[language]]
+name = "javascript"
+formatter = { command = "bunx", args = ["prettier", "--parser", "typescript"] }
+
+[[language]]
+name = "astro"
+formatter = { command = "bunx", args = ["prettier", "--parser", "astro"] }
+language-servers = ["astro-ls"]
+
+[[language]]
+name = "markdown"
+formatter = { command = "bunx", args = ["prettier", "--parser", "markdown"] }
+
+[[language]]
+name = "yaml"
+formatter = { command = "bunx", args = ["prettier", "--parser", "yaml"] }
+
+[language-server.astro-ls]
+command = "astro-ls"
+args = ["--stdio"]
+config = { typescript = { tsdk = "node_modules/typescript/lib" } }

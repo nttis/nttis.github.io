@@ -1,0 +1,62 @@
+---
+import { getCollection, render } from "astro:content"
+
+export async function getStaticPaths() {
+    const posts = await getCollection("blogposts")
+    return posts.map((post) => ({
+        params: { slug: post.id },
+        props: { post },
+    }))
+}
+
+//
+import Base from "@src/layouts/Base.astro"
+
+import type { InferGetStaticPropsType } from "astro"
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>
+
+const { post }: Props = Astro.props
+const { Content } = await render(post)
+
+//
+const dateEpoch = post.data.date
+const dateOptions: Intl.DateTimeFormatOptions = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+}
+const pubDate = new Date(dateEpoch).toLocaleDateString("en-US", dateOptions)
+---
+
+<Base title={post.data.title}>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css"
+        slot="head"
+    />
+
+    <style slot="head">
+        body {
+            max-width: 768px;
+            margin: auto;
+        }
+        #post-title {
+            margin-top: 0;
+        }
+
+        #date {
+            margin-bottom: 0;
+        }
+    </style>
+
+    <header slot="body">
+        <p id="date">{pubDate}</p>
+        <h1 id="post-title">{post.data.title}</h1>
+    </header>
+
+    <main slot="body">
+        <Content />
+    </main>
+</Base>

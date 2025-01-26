@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content"
+
+const blogposts = await getCollection("blogposts")
+
+import Base from "@src/layouts/Base.astro"
+---
+
+<Base title="Blog">
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css"
+        slot="head"
+    />
+
+    <style slot="head">
+        main {
+            max-width: 768px;
+            margin: auto;
+        }
+    </style>
+
+    <main slot="body">
+        <h1>Hey. Here are some blog posts:</h1>
+
+        <ul>
+            {
+                blogposts.map((post) => {
+                    return (
+                        <li>
+                            <a href={"/blog/" + post.id}>{post.data.title}</a>
+                        </li>
+                    )
+                })
+            }
+        </ul>
+    </main>
+</Base>
